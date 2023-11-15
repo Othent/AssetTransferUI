@@ -34,29 +34,28 @@ function App() {
   };
 
 
-  const [userDetails, setUserDetails] = useState(null);
   async function login() {
-    const userDetails = await othent.logIn()
-    setUserDetails(userDetails)
-    console.log(userDetails)
+    await othent.logIn()
+  }
+
+  async function logOut() {
+    await othent.logOut()
   }
 
   async function send() {
 
-    console.log(AAAddress, amount, userDetails.email)
+    const signedWarpTransaction = await othent.signTransactionWarp({
+      othentFunction: 'sendTransaction', 
+      data: {
+        toContractId: AAAddress, 
+        toContractFunction: 'transfer', 
+        txnData: { qty: amount, target: recipientAddress } 
+      }, 
+    });
 
-    // const signedWarpTransaction = await othent.signTransactionWarp({
-    //   othentFunction: 'sendTransaction', 
-    //   data: {
-    //     toContractId: AAAddress, 
-    //     toContractFunction: 'transfer', 
-    //     txnData: { qty: amount } 
-    //   }, 
-    // });
-
-    // const transaction = await othent.sendTransactionWarp(signedWarpTransaction);
+    const transaction = await othent.sendTransactionWarp(signedWarpTransaction);
     
-    // console.log(transaction);
+    console.log(transaction);
   }
 
 
@@ -64,12 +63,13 @@ function App() {
     <div className="App">
       <h1>Transfer Atomic Asset</h1>
 
-        <div>
-          <h2>Step 1: Login</h2>
-          <button onClick={login}>Login</button>
+        <div className='center'>
+          <h2>Step 1: Log in</h2>
+          <button onClick={logOut}>Log out</button>
+          <button onClick={login}>Log in</button>
         </div>
 
-        <div>
+        <div className='center'>
           <h2>Step 2: Enter transfer details</h2>
           <input
             type="text"
@@ -92,7 +92,7 @@ function App() {
         </div>
 
 
-        <div>
+        <div className='center'>
           <h2>Step 3: Press send</h2>
           <button onClick={send}>Send</button>
         </div>
