@@ -19,8 +19,18 @@ function App() {
 
 
   const [recipientAddress, setRecipientAddress] = useState('');
-  const handleInputChange = (e) => {
+  const handleRecipientAddressChange = (e) => {
     setRecipientAddress(e.target.value);
+  };
+
+  const [AAAddress, setAAAddress] = useState('');
+  const handleAAIdChange = (e) => {
+    setAAAddress(e.target.value);
+  };
+
+  const [amount, setAmount] = useState('');
+  const handleAmount = (e) => {
+    setAmount(e.target.value);
   };
 
 
@@ -33,18 +43,20 @@ function App() {
 
   async function send() {
 
-    const signedWarpTransaction = await othent.signTransactionWarp({
-      othentFunction: 'sendTransaction', 
-      data: {
-        toContractId: '2W9NoIJM1SuaFUaSOJsui_5lD_NvCHTjez5HKe2SjYU', 
-        toContractFunction: 'createPost', 
-        txnData: { blog_entry: 'Hello World!'} 
-      }, 
-    });
+    console.log(AAAddress, amount, userDetails.email)
 
-    const transaction = await othent.sendTransactionWarp(signedWarpTransaction);
+    // const signedWarpTransaction = await othent.signTransactionWarp({
+    //   othentFunction: 'sendTransaction', 
+    //   data: {
+    //     toContractId: AAAddress, 
+    //     toContractFunction: 'transfer', 
+    //     txnData: { qty: amount } 
+    //   }, 
+    // });
+
+    // const transaction = await othent.sendTransactionWarp(signedWarpTransaction);
     
-    console.log(transaction);
+    // console.log(transaction);
   }
 
 
@@ -58,13 +70,30 @@ function App() {
         </div>
 
         <div>
-          <h2>Step 2: Send Asset</h2>
+          <h2>Step 2: Enter transfer details</h2>
+          <input
+            type="text"
+            placeholder="Atomic Asset ID"
+            value={AAAddress}
+            onChange={handleAAIdChange}
+          />
+          <input
+            type="text"
+            placeholder="Amount to send"
+            value={amount}
+            onChange={handleAmount}
+          />
           <input
             type="text"
             placeholder="Recipient address"
             value={recipientAddress}
-            onChange={handleInputChange}
+            onChange={handleRecipientAddressChange}
           />
+        </div>
+
+
+        <div>
+          <h2>Step 3: Press send</h2>
           <button onClick={send}>Send</button>
         </div>
 
